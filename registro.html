@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendar Cita – SaludAgenda</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+      <i class="bi bi-heart-pulse-fill text-accent fs-4"></i>
+      <span class="brand-name">SaludAgenda</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-fill me-1"></i>Inicio</a></li>
+        <li class="nav-item"><a class="nav-link active" href="registro.html"><i class="bi bi-calendar-plus me-1"></i>Agendar Cita</a></li>
+        <li class="nav-item"><a class="nav-link" href="citas.html"><i class="bi bi-list-columns me-1"></i>Mis Citas</a></li>
+        <li class="nav-item"><a class="nav-link" href="contacto.html"><i class="bi bi-envelope me-1"></i>Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+        <li class="breadcrumb-item active">Agendar Cita</li>
+      </ol>
+    </nav>
+    <h1><i class="bi bi-calendar-plus me-3"></i>Agendar Cita Médica</h1>
+    <p>Completa el formulario para programar tu consulta</p>
+  </div>
+</div>
+
+<!-- FORM SECTION -->
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="form-card">
+          <div class="form-card-header">
+            <i class="bi bi-clipboard2-pulse fs-3 mb-2"></i>
+            <h4>Datos de la Cita</h4>
+            <p>Todos los campos marcados con <span class="text-accent">*</span> son obligatorios</p>
+          </div>
+          <div class="form-card-body">
+
+            <div id="alertSuccess" class="alert alert-success d-none" role="alert">
+              <i class="bi bi-check-circle-fill me-2"></i>
+              <strong>¡Cita registrada exitosamente!</strong> Puedes verla en <a href="citas.html">Mis Citas</a>.
+            </div>
+            <div id="alertError" class="alert alert-danger d-none" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              Por favor, corrige los errores antes de continuar.
+            </div>
+
+            <form id="formRegistro" novalidate>
+              <div class="row g-3">
+
+                <div class="col-12">
+                  <label for="nombre" class="form-label">Nombre Completo <span class="text-accent">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control" id="nombre" placeholder="Ej. María López García" required minlength="3">
+                    <div class="invalid-feedback">El nombre debe tener al menos 3 caracteres.</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Correo Electrónico <span class="text-accent">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input type="email" class="form-control" id="email" placeholder="usuario@dominio.com" required>
+                    <div class="invalid-feedback">Ingresa un correo válido (usuario@dominio.com).</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="telefono" class="form-label">Teléfono <span class="text-accent">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                    <input type="tel" class="form-control" id="telefono" placeholder="10 dígitos" required pattern="[0-9]{10,15}">
+                    <div class="invalid-feedback">El teléfono debe tener mínimo 10 dígitos numéricos.</div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label for="especialidad" class="form-label">Especialidad <span class="text-accent">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-hospital"></i></span>
+                    <select class="form-select" id="especialidad" required>
+                      <option value="">— Selecciona una especialidad —</option>
+                      <option value="Medicina General">Medicina General</option>
+                      <option value="Cardiología">Cardiología</option>
+                      <option value="Pediatría">Pediatría</option>
+                      <option value="Ginecología">Ginecología</option>
+                      <option value="Odontología">Odontología</option>
+                      <option value="Oftalmología">Oftalmología</option>
+                      <option value="Dermatología">Dermatología</option>
+                      <option value="Traumatología">Traumatología</option>
+                      <option value="Neurología">Neurología</option>
+                      <option value="Psicología">Psicología</option>
+                    </select>
+                    <div class="invalid-feedback">Selecciona una especialidad.</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fecha" class="form-label">Fecha de la Cita <span class="text-accent">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-calendar3"></i></span>
+                    <input type="date" class="form-control" id="fecha" required>
+                    <div class="invalid-feedback">Selecciona una fecha válida (no puede ser pasada).</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="hora" class="form-label">Hora de la Cita <span class="text-accent">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                    <input type="time" class="form-control" id="hora" required min="08:00" max="20:00">
+                    <div class="invalid-feedback">Selecciona una hora válida (08:00–20:00).</div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label for="motivo" class="form-label">Motivo de la Consulta <span class="text-accent">*</span></label>
+                  <div class="input-group align-items-start">
+                    <span class="input-group-text"><i class="bi bi-chat-text"></i></span>
+                    <textarea class="form-control" id="motivo" rows="4" placeholder="Describe brevemente el motivo de tu consulta..." required minlength="10"></textarea>
+                    <div class="invalid-feedback">El motivo debe tener al menos 10 caracteres.</div>
+                  </div>
+                  <small class="text-muted"><span id="motivoCount">0</span>/500 caracteres</small>
+                </div>
+
+                <div class="col-12 mt-3">
+                  <div class="d-flex gap-3 justify-content-end">
+                    <button type="button" class="btn btn-outline-secondary" onclick="limpiarFormulario()">
+                      <i class="bi bi-x-circle me-2"></i>Limpiar
+                    </button>
+                    <button type="submit" class="btn btn-accent btn-lg">
+                      <i class="bi bi-calendar-check me-2"></i>Guardar Cita
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- INFO CARDS -->
+        <div class="row g-3 mt-3">
+          <div class="col-md-4">
+            <div class="info-card">
+              <i class="bi bi-clock-history text-accent fs-3 mb-2"></i>
+              <h6>Horario de Atención</h6>
+              <p>Lunes a Viernes: 8:00 – 20:00<br>Sábado: 9:00 – 14:00</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="info-card">
+              <i class="bi bi-shield-check text-accent fs-3 mb-2"></i>
+              <h6>Datos Seguros</h6>
+              <p>Tu información se guarda de forma segura y privada.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="info-card">
+              <i class="bi bi-bell text-accent fs-3 mb-2"></i>
+              <h6>Recordatorios</h6>
+              <p>Recibirás confirmación por correo electrónico.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer mt-5">
+  <div class="container">
+    <p class="text-center footer-copy mb-0">© 2025 SaludAgenda. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('fecha').setAttribute('min', today);
+
+  // Character counter for motivo
+  document.getElementById('motivo').addEventListener('input', function() {
+    document.getElementById('motivoCount').textContent = this.value.length;
+    if (this.value.length > 500) this.value = this.value.substring(0, 500);
+  });
+
+  // Phone: only digits
+  document.getElementById('telefono').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '');
+  });
+
+  // Check if editing
+  const editId = localStorage.getItem('editCitaId');
+  if (editId) {
+    const citas = JSON.parse(localStorage.getItem('citas') || '[]');
+    const cita = citas.find(c => c.id == editId);
+    if (cita) {
+      document.getElementById('nombre').value = cita.nombre;
+      document.getElementById('email').value = cita.email;
+      document.getElementById('telefono').value = cita.telefono;
+      document.getElementById('especialidad').value = cita.especialidad;
+      document.getElementById('fecha').value = cita.fecha;
+      document.getElementById('hora').value = cita.hora;
+      document.getElementById('motivo').value = cita.motivo;
+      document.getElementById('motivoCount').textContent = cita.motivo.length;
+      document.querySelector('.form-card-header h4').textContent = 'Editar Cita';
+    }
+  }
+
+  document.getElementById('formRegistro').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre');
+    const email = document.getElementById('email');
+    const telefono = document.getElementById('telefono');
+    const especialidad = document.getElementById('especialidad');
+    const fecha = document.getElementById('fecha');
+    const hora = document.getElementById('hora');
+    const motivo = document.getElementById('motivo');
+
+    let valid = true;
+
+    // Validate nombre
+    if (!nombre.value.trim() || nombre.value.trim().length < 3) {
+      nombre.classList.add('is-invalid'); valid = false;
+    } else nombre.classList.remove('is-invalid');
+
+    // Email regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.value.trim())) {
+      email.classList.add('is-invalid'); valid = false;
+    } else email.classList.remove('is-invalid');
+
+    // Phone
+    const telDigits = telefono.value.replace(/\D/g, '');
+    if (telDigits.length < 10) {
+      telefono.classList.add('is-invalid'); valid = false;
+    } else telefono.classList.remove('is-invalid');
+
+    // Especialidad
+    if (!especialidad.value) {
+      especialidad.classList.add('is-invalid'); valid = false;
+    } else especialidad.classList.remove('is-invalid');
+
+    // Fecha
+    const selectedDate = new Date(fecha.value + 'T00:00:00');
+    const todayDate = new Date(); todayDate.setHours(0,0,0,0);
+    if (!fecha.value || selectedDate < todayDate) {
+      fecha.classList.add('is-invalid'); valid = false;
+    } else fecha.classList.remove('is-invalid');
+
+    // Hora
+    if (!hora.value) {
+      hora.classList.add('is-invalid'); valid = false;
+    } else hora.classList.remove('is-invalid');
+
+    // Motivo
+    if (!motivo.value.trim() || motivo.value.trim().length < 10) {
+      motivo.classList.add('is-invalid'); valid = false;
+    } else motivo.classList.remove('is-invalid');
+
+    if (!valid) {
+      document.getElementById('alertError').classList.remove('d-none');
+      document.getElementById('alertSuccess').classList.add('d-none');
+      return;
+    }
+
+    // Save to localStorage
+    const citas = JSON.parse(localStorage.getItem('citas') || '[]');
+
+    if (editId) {
+      // Update
+      const idx = citas.findIndex(c => c.id == editId);
+      if (idx >= 0) {
+        citas[idx] = {
+          ...citas[idx],
+          nombre: nombre.value.trim(),
+          email: email.value.trim(),
+          telefono: telDigits,
+          especialidad: especialidad.value,
+          fecha: fecha.value,
+          hora: hora.value,
+          motivo: motivo.value.trim()
+        };
+      }
+      localStorage.removeItem('editCitaId');
+    } else {
+      // New
+      const nuevaCita = {
+        id: Date.now(),
+        nombre: nombre.value.trim(),
+        email: email.value.trim(),
+        telefono: telDigits,
+        especialidad: especialidad.value,
+        fecha: fecha.value,
+        hora: hora.value,
+        motivo: motivo.value.trim(),
+        estado: 'Programada',
+        fechaRegistro: new Date().toLocaleDateString('es-MX')
+      };
+      citas.push(nuevaCita);
+    }
+
+    localStorage.setItem('citas', JSON.stringify(citas));
+
+    document.getElementById('alertSuccess').classList.remove('d-none');
+    document.getElementById('alertError').classList.add('d-none');
+    this.reset();
+    document.getElementById('motivoCount').textContent = '0';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function limpiarFormulario() {
+    document.getElementById('formRegistro').reset();
+    document.getElementById('motivoCount').textContent = '0';
+    document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+    document.getElementById('alertSuccess').classList.add('d-none');
+    document.getElementById('alertError').classList.add('d-none');
+    localStorage.removeItem('editCitaId');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Citas – SaludAgenda</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+      <i class="bi bi-heart-pulse-fill text-accent fs-4"></i>
+      <span class="brand-name">SaludAgenda</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-fill me-1"></i>Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="registro.html"><i class="bi bi-calendar-plus me-1"></i>Agendar Cita</a></li>
+        <li class="nav-item"><a class="nav-link active" href="citas.html"><i class="bi bi-list-columns me-1"></i>Mis Citas</a></li>
+        <li class="nav-item"><a class="nav-link" href="contacto.html"><i class="bi bi-envelope me-1"></i>Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+        <li class="breadcrumb-item active">Mis Citas</li>
+      </ol>
+    </nav>
+    <h1><i class="bi bi-list-columns me-3"></i>Listado de Citas</h1>
+    <p>Gestiona y visualiza todas tus citas médicas</p>
+  </div>
+</div>
+
+<section class="py-4">
+  <div class="container">
+
+    <!-- FILTER CARD -->
+    <div class="filter-card mb-4">
+      <div class="filter-card-header">
+        <i class="bi bi-funnel me-2"></i>Filtros de búsqueda
+      </div>
+      <div class="filter-card-body">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label">Especialidad</label>
+            <select class="form-select form-select-sm" id="filtroEspecialidad">
+              <option value="">Todas</option>
+              <option>Medicina General</option>
+              <option>Cardiología</option>
+              <option>Pediatría</option>
+              <option>Ginecología</option>
+              <option>Odontología</option>
+              <option>Oftalmología</option>
+              <option>Dermatología</option>
+              <option>Traumatología</option>
+              <option>Neurología</option>
+              <option>Psicología</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Fecha desde</label>
+            <input type="date" class="form-control form-control-sm" id="filtroFechaDesde">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Fecha hasta</label>
+            <input type="date" class="form-control form-control-sm" id="filtroFechaHasta">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Estado</label>
+            <select class="form-select form-select-sm" id="filtroEstado">
+              <option value="">Todos</option>
+              <option>Programada</option>
+              <option>Confirmada</option>
+              <option>Cancelada</option>
+            </select>
+          </div>
+          <div class="col-12 d-flex gap-2">
+            <button class="btn btn-accent btn-sm" onclick="aplicarFiltros()">
+              <i class="bi bi-search me-1"></i>Filtrar
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="limpiarFiltros()">
+              <i class="bi bi-x-circle me-1"></i>Limpiar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS BAR -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+      <div class="total-count">
+        Mostrando <strong id="citasCount">0</strong> cita(s)
+      </div>
+      <div class="d-flex gap-2">
+        <a href="registro.html" class="btn btn-accent btn-sm">
+          <i class="bi bi-plus-circle me-1"></i>Nueva Cita
+        </a>
+        <button class="btn btn-outline-secondary btn-sm" onclick="exportarTXT()">
+          <i class="bi bi-download me-1"></i>Exportar TXT
+        </button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+      <table class="table table-hover align-middle" id="tablaCitas">
+        <thead>
+          <tr>
+            <th style="width:60px">#ID</th>
+            <th>Paciente</th>
+            <th>Especialidad</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th style="width:160px">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaCuerpo">
+          <!-- filled by JS -->
+        </tbody>
+      </table>
+      <div id="emptyState" class="empty-state d-none">
+        <i class="bi bi-calendar-x fs-1 mb-3"></i>
+        <h5>No hay citas registradas</h5>
+        <p>Agenda tu primera cita médica.</p>
+        <a href="registro.html" class="btn btn-accent">
+          <i class="bi bi-plus-circle me-2"></i>Agendar Cita
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODAL DETALLES -->
+<div class="modal fade" id="modalDetalle" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-custom">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-info-circle me-2"></i>Detalle de Cita</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalDetalleBody"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CAMBIAR ESTADO -->
+<div class="modal fade" id="modalEstado" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content modal-custom">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-toggle-on me-2"></i>Cambiar Estado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="estadoCitaId">
+        <label class="form-label">Nuevo Estado</label>
+        <select class="form-select" id="nuevoEstado">
+          <option value="Programada">Programada</option>
+          <option value="Confirmada">Confirmada</option>
+          <option value="Cancelada">Cancelada</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-accent" onclick="guardarEstado()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer mt-5">
+  <div class="container">
+    <p class="text-center footer-copy mb-0">© 2025 SaludAgenda. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let citasFiltradas = [];
+
+  function getCitas() {
+    return JSON.parse(localStorage.getItem('citas') || '[]');
+  }
+
+  function saveCitas(citas) {
+    localStorage.setItem('citas', JSON.stringify(citas));
+  }
+
+  function badgeEstado(estado) {
+    const map = {
+      'Programada': 'badge-programada',
+      'Confirmada': 'badge-confirmada',
+      'Cancelada': 'badge-cancelada'
+    };
+    return `<span class="badge ${map[estado] || 'bg-secondary'}">${estado}</span>`;
+  }
+
+  function renderTabla(citas) {
+    const tbody = document.getElementById('tablaCuerpo');
+    const empty = document.getElementById('emptyState');
+    const table = document.getElementById('tablaCitas');
+    document.getElementById('citasCount').textContent = citas.length;
+
+    if (citas.length === 0) {
+      tbody.innerHTML = '';
+      table.classList.add('d-none');
+      empty.classList.remove('d-none');
+      return;
+    }
+
+    table.classList.remove('d-none');
+    empty.classList.add('d-none');
+
+    tbody.innerHTML = citas.map(c => `
+      <tr>
+        <td><code class="cita-id">#${String(c.id).slice(-4)}</code></td>
+        <td>
+          <div class="fw-500">${c.nombre}</div>
+          <small class="text-muted">${c.email}</small>
+        </td>
+        <td><span class="especialidad-pill">${c.especialidad}</span></td>
+        <td>${formatFecha(c.fecha)}</td>
+        <td>${c.hora}</td>
+        <td>${badgeEstado(c.estado)}</td>
+        <td>
+          <div class="d-flex gap-1">
+            <button class="btn btn-sm btn-icon" title="Ver detalle" onclick="verDetalle(${c.id})">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button class="btn btn-sm btn-icon btn-edit" title="Editar" onclick="editarCita(${c.id})">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-icon btn-state" title="Cambiar estado" onclick="abrirModalEstado(${c.id})">
+              <i class="bi bi-toggle-on"></i>
+            </button>
+            <button class="btn btn-sm btn-icon btn-del" title="Eliminar" onclick="eliminarCita(${c.id})">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    citasFiltradas = citas;
+  }
+
+  function formatFecha(fechaStr) {
+    if (!fechaStr) return '';
+    const [y, m, d] = fechaStr.split('-');
+    const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    return `${d} ${meses[parseInt(m)-1]} ${y}`;
+  }
+
+  function aplicarFiltros() {
+    const esp = document.getElementById('filtroEspecialidad').value;
+    const desde = document.getElementById('filtroFechaDesde').value;
+    const hasta = document.getElementById('filtroFechaHasta').value;
+    const estado = document.getElementById('filtroEstado').value;
+
+    let citas = getCitas();
+
+    if (esp) citas = citas.filter(c => c.especialidad === esp);
+    if (estado) citas = citas.filter(c => c.estado === estado);
+    if (desde) citas = citas.filter(c => c.fecha >= desde);
+    if (hasta) citas = citas.filter(c => c.fecha <= hasta);
+
+    renderTabla(citas);
+  }
+
+  function limpiarFiltros() {
+    document.getElementById('filtroEspecialidad').value = '';
+    document.getElementById('filtroFechaDesde').value = '';
+    document.getElementById('filtroFechaHasta').value = '';
+    document.getElementById('filtroEstado').value = '';
+    renderTabla(getCitas());
+  }
+
+  function verDetalle(id) {
+    const cita = getCitas().find(c => c.id == id);
+    if (!cita) return;
+    document.getElementById('modalDetalleBody').innerHTML = `
+      <dl class="row detail-dl">
+        <dt class="col-sm-4">ID</dt><dd class="col-sm-8"><code>#${String(cita.id).slice(-4)}</code></dd>
+        <dt class="col-sm-4">Paciente</dt><dd class="col-sm-8">${cita.nombre}</dd>
+        <dt class="col-sm-4">Correo</dt><dd class="col-sm-8">${cita.email}</dd>
+        <dt class="col-sm-4">Teléfono</dt><dd class="col-sm-8">${cita.telefono}</dd>
+        <dt class="col-sm-4">Especialidad</dt><dd class="col-sm-8">${cita.especialidad}</dd>
+        <dt class="col-sm-4">Fecha</dt><dd class="col-sm-8">${formatFecha(cita.fecha)}</dd>
+        <dt class="col-sm-4">Hora</dt><dd class="col-sm-8">${cita.hora}</dd>
+        <dt class="col-sm-4">Estado</dt><dd class="col-sm-8">${badgeEstado(cita.estado)}</dd>
+        <dt class="col-sm-4">Motivo</dt><dd class="col-sm-8">${cita.motivo}</dd>
+        <dt class="col-sm-4">Registrado</dt><dd class="col-sm-8">${cita.fechaRegistro || '-'}</dd>
+      </dl>
+    `;
+    new bootstrap.Modal(document.getElementById('modalDetalle')).show();
+  }
+
+  function editarCita(id) {
+    localStorage.setItem('editCitaId', id);
+    window.location.href = 'registro.html';
+  }
+
+  function abrirModalEstado(id) {
+    const cita = getCitas().find(c => c.id == id);
+    if (!cita) return;
+    document.getElementById('estadoCitaId').value = id;
+    document.getElementById('nuevoEstado').value = cita.estado;
+    new bootstrap.Modal(document.getElementById('modalEstado')).show();
+  }
+
+  function guardarEstado() {
+    const id = document.getElementById('estadoCitaId').value;
+    const nuevoEstado = document.getElementById('nuevoEstado').value;
+    const citas = getCitas();
+    const idx = citas.findIndex(c => c.id == id);
+    if (idx >= 0) {
+      citas[idx].estado = nuevoEstado;
+      saveCitas(citas);
+    }
+    bootstrap.Modal.getInstance(document.getElementById('modalEstado')).hide();
+    aplicarFiltros();
+  }
+
+  function eliminarCita(id) {
+    if (!confirm('¿Estás seguro de que deseas eliminar esta cita? Esta acción no se puede deshacer.')) return;
+    const citas = getCitas().filter(c => c.id != id);
+    saveCitas(citas);
+    aplicarFiltros();
+  }
+
+  function exportarTXT() {
+    const citas = citasFiltradas.length > 0 ? citasFiltradas : getCitas();
+    if (citas.length === 0) {
+      alert('No hay citas para exportar.');
+      return;
+    }
+
+    const linea = '─'.repeat(60);
+    let contenido = `SALUDAGENDA – LISTADO DE CITAS\n`;
+    contenido += `Exportado: ${new Date().toLocaleString('es-MX')}\n`;
+    contenido += `Total de citas: ${citas.length}\n`;
+    contenido += `${linea}\n\n`;
+
+    citas.forEach((c, i) => {
+      contenido += `CITA #${i + 1} | ID: ${String(c.id).slice(-4)}\n`;
+      contenido += `Paciente    : ${c.nombre}\n`;
+      contenido += `Correo      : ${c.email}\n`;
+      contenido += `Teléfono    : ${c.telefono}\n`;
+      contenido += `Especialidad: ${c.especialidad}\n`;
+      contenido += `Fecha       : ${formatFecha(c.fecha)}\n`;
+      contenido += `Hora        : ${c.hora}\n`;
+      contenido += `Estado      : ${c.estado}\n`;
+      contenido += `Motivo      : ${c.motivo}\n`;
+      contenido += `${linea}\n\n`;
+    });
+
+    const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `citas_${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Initial render
+  renderTabla(getCitas());
+</script>
+</body>
+</html>
